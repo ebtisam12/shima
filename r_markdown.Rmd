@@ -1,0 +1,171 @@
+---
+title: "Linear Optimization for The Profit "
+output: html_document
+---
+---
+
+### _Must do before solving the problem_
+
+- install`lpSolve `by using`install.packages("lpSolve") `
+-  write`library(lpSolve) ` to access the `lp` function
+
+---
+
+## The problem 
+
+
+LP Brewery is coming up with a hot new Soda called Grape. Because it is a special craft beer, it has a margin of $30, It uses 10g CO2, 4 oz of water and 15 pounds of flavor. With the addition of this new brew, LP Brewery has to now think about allocating its personnel to the different manufacturing processes. Each of the kegs takes 5 (Strawberry), 10 (Orange), and 20 (Grape) hours of labor to make and we have only 5 employees full-time. If this is the production planning for a month of brewing, what is the optimal amount of each beer that must be produced to maximize profit
+
+---
+
+
+### Prices 
+- Strawberry = 13$ 
+- Orange = 23$
+- Grape =30$
+
+### Make a list 
+
+```r
+# Objective function coefficients
+obj_coeff <- c(13,23,30)
+```
+---
+
+### Ingredients
+- co2
+- water
+- flavor
+- time to make (hours)
+
+
+
+### Strawberry
+- 5g of co2
+- 4 oz of water
+- 35 pounds of flavor
+- require 5 h to make 
+
+
+
+### Orange
+- 15g of co2
+- 4 oz of water
+- 20 pounds of flavor
+- require 10 h to make 
+
+
+
+### Grape
+- 10g of co2
+- 4 oz of water
+- 15 pounds of flavor
+- require 20 h to make 
+
+
+
+### Make matrix for all the ingredients
+```r
+# Constraint coefficients
+constraints <- matrix(c(5,15,10, #CO2
+                        4,4,4, #Water
+                        35,20,15, #Flavor
+                        5,10,20 #hours
+                        
+), 
+nrow = 4, byrow = TRUE)
+```
+---
+
+### The locaial operation
+
+```r
+# Direction of logical operators
+direction <- c("<=", 
+               "<=",
+               "<=",
+               "<="
+)
+
+```
+---
+### The resorse 
+
+- co2 = 480g
+- water = 160 oz
+- flavor = 1190 pounds 
+- time = 200 ( 5 worker *8 hour =40 hour  then 40 hour *5 days =200)
+
+### Make a list 
+
+```r
+resources <- c(480,
+               160,
+               1190,
+               200  # 5*8=40 then 40*5=200, 20 working days for hours of labor to make and we have only 5 employees full-time.
+)
+
+
+```
+---
+### The linear optimization for the problem 
+solving by using `lp` function and specify `max` in `lp` to optimize the profit 
+
+```r
+
+# Create the lp
+sol<-lp(
+  "max", 
+  obj_coeff, 
+  constraints, 
+  direction, 
+  resources)
+
+
+
+```
+---
+
+### The max profit 
+shows the max profit by using `sol$objval`
+```r
+
+# Max Profit
+sol$objval
+
+```
+![](https://user-images.githubusercontent.com/48656800/103015414-7276fc00-4551-11eb-9224-5128b7471807.png)
+
+---
+
+### how much to make 
+
+shows how much to make from every soda to get to the max profit by using `sol$solution`
+
+- Strawberry = 31.6
+- Orange = 4.2
+- Grape =0.0
+
+```r
+# Best values for objective function
+sol$solution
+```
+![](https://user-images.githubusercontent.com/48656800/103016201-c46c5180-4552-11eb-8945-c905b25a2517.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
